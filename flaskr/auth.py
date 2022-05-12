@@ -1,4 +1,5 @@
 import functools
+import traceback
 
 from flask import (
     Blueprint, flash, g, redirect, render_template, request, session, url_for
@@ -12,6 +13,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth')
 @bp.route('/register', methods=('GET', 'POST'))
 def register():
     if request.method == 'POST':
+
         username = request.form['username']
         password = request.form['password']
         db = get_db()
@@ -25,11 +27,12 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO user (username, password) VALUES (?, ?)",
-                    (username, generate_password_hash(password)),
+                    "INSERT INTO car_sys.user (username, password) VALUES ('{}', '{}')".format(username,generate_password_hash(password))
                 )
-                db.commit()
-            except db.IntegrityError:
+                # db.commit()
+            
+            except Exception as e:
+                traceback.print_exc()
                 error = f"User {username} is already registered."
             else:
                 return redirect(url_for("auth.login"))
@@ -45,18 +48,18 @@ def login():
         password = request.form['password']
         db = get_db()
         error = None
-        user = db.execute(
-            'SELECT * FROM user WHERE username = ?',(username,)
-        ).fetchone()
+        user = db.prepare(
+            "SELECT * FROM car_sys.user WHERE username = '{}'".format(username)
+        )
 
         if user is None:
             error = 'Incorrect username.'
-        elif not check_password_hash(user['password'],password):
+        elif not check_password_hash(user()[0]['password'],password):
             error = 'Incorrect password.'
         
         if error is None:
             session.clear()
-            session['user_id'] = user['id']
+            session['user_name'] = user()[0]['username']
             return redirect(url_for('index'))
 
         flash(error)
