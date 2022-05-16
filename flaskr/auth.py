@@ -1,8 +1,8 @@
 import functools
 import traceback
-
+from json import dumps
 from flask import (
-    Blueprint, flash, g, redirect, render_template, request, session, url_for
+    Blueprint, flash, g, redirect, render_template, request, session, url_for,make_response
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 
@@ -10,10 +10,9 @@ from flaskr.db import get_db
 
 bp = Blueprint('auth', __name__, url_prefix='/auth')
 
-@bp.route('/register', methods=('GET', 'POST'))
+@bp.route('/register', methods=('GET','POST'))
 def register():
     if request.method == 'POST':
-
         account = request.form['account']
         password = request.form['password']
         type = request.form['type']
@@ -27,24 +26,28 @@ def register():
         elif not type:
             error = 'type is required.'
 
-        print('type',type)
-
+        
         if error is None:
             try:
                 db.execute(
                     "INSERT INTO car_sys.login (account, password,type) VALUES ('{}', '{}','{}')".format(account,generate_password_hash(password),type)
                 )
-                # db.commit()
-            
+                
             except Exception as e:
                 traceback.print_exc()
-                error = f"User {username} is already registered."
+                error = f"User {account} is already registered."
+                response = make_response(dumps(error),404)
             else:
-                return redirect(url_for("auth.login"))
-
+                response = make_response(dumps('register {} successfully'.format(account)), 200)
+                # return redirect(url_for("auth.login"))
+        else:
+            response = make_response(dumps(error),400)
         flash(error)
+        return response
+    else:
+        return render_template('auth/register.html')
 
-    return render_template('auth/register.html')
+    # return render_template('auth/register.html')
 
 @bp.route('/login',methods=('GET','POST'))
 def login():
