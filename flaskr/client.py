@@ -1,8 +1,10 @@
 
+from http.client import responses
 import traceback
 from json import dumps
+from urllib import response
 from flask import (
-    Blueprint, url_for, make_response,request
+    Blueprint, make_response,request
 )
 
 from flaskr.db import get_db
@@ -42,4 +44,28 @@ def register():
 
         return response
     else:
-        return 'good'
+        return 'client/register'
+
+
+@bp.route('/search', methods=('POST','GET'))
+def search():
+    if request.method == 'POST':
+        db = get_db()
+        error = None
+        client_number = request.form['number']
+
+        try:
+            row = db.prepare("select * from car_sys.client where client_number='{}'".format(client_number))
+        except Exception as e:
+            error = traceback.format_exc()
+            response = make_response(dumps(error), 404)
+        else:
+            info = row()
+            # print(info)
+            # print(type(info))
+            response = make_response(dumps(info),200)
+        
+        return response
+    else:
+        return 'client/search'
+
