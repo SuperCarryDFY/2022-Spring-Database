@@ -54,15 +54,23 @@ def search():
         print(client_number)
         if not client_number:
             try:
-                row = db.prepare("select * from car_sys.client ")
+                rows = db.prepare("select * from car_sys.client ")
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
             else:
+                res = []
+                info = rows()
+                for row in info:
+                    dic = {}
+                    dic['client_number'] = row[0]
+                    dic['name'] = row[1]
+                    dic['type'] = row[2]
+                    dic['contact_man'] = row[3]
+                    dic['contact_number'] = row[4]
+                    res.append(dic)
                 
-                info = row()
-                print(info)
-                response = make_response(dumps(info),200)
+                response = make_response(dumps(res),200)
         else:
             try:
                 row = db.prepare("select * from car_sys.client where client_number='{}'".format(client_number))
