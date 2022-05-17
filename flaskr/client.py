@@ -38,7 +38,7 @@ def register():
 
         else:
             response = make_response(
-                dumps('register {} successfully'.format(client_name)), 200)
+                dumps('{}'.format(client_number)), 200)
 
         return response
     else:
