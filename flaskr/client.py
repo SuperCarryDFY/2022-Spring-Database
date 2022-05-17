@@ -66,8 +66,9 @@ def search():
                     dic['client_number'] = row[0]
                     dic['name'] = row[1]
                     dic['type'] = row[2]
-                    dic['contact_man'] = row[3]
-                    dic['contact_number'] = row[4]
+                    dic['discount'] = row[3]
+                    dic['contact_man'] = row[4]
+                    dic['contact_number'] = row[5]
                     res.append(dic)
                 
                 response = make_response(dumps(res),200)
