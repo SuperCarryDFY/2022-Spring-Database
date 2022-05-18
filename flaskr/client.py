@@ -64,7 +64,7 @@ def search():
         db = get_db()
         error = None
         client_number = request.form['number']
-        print(client_number)
+        # print(client_number)
         if not client_number:
             try:
                 rows = db.prepare("select * from car_sys.client ")
@@ -93,8 +93,6 @@ def search():
                 response = make_response(dumps(error), 404)
             else:
                 info = rows()
-                # print(info)
-                # print(type(info))
                 res = []
                 dic = {}
                 dic['client_number'] = info[0][0]

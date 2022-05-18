@@ -34,6 +34,9 @@ def create_app(test_config=None):
     from . import car
     app.register_blueprint(car.bp)
 
+    from . import staff
+    app.register_blueprint(staff.bp)
+
     from . import auth
     app.register_blueprint(auth.bp)
 
