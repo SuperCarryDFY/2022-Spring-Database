@@ -1,3 +1,4 @@
+from genericpath import exists
 import traceback
 from json import dumps
 from flask import (
@@ -40,14 +41,16 @@ def repairman_search():
                 response = make_response(dumps(error), 404)
             else:
                 info = rows()
-
-                res = []
-                dic = {}
-                dic['id'] = info[0][0]
-                dic['type'] = info[0][1]
-                dic['name'] = info[0][2]
-                dic['telephone'] = info[0][3]
-                res.append(dic)
+                if len(info) == 0:
+                    res = "id={} doesn't exist".format(id)
+                else:
+                    res = []
+                    dic = {}
+                    dic['id'] = info[0][0]
+                    dic['type'] = info[0][1]
+                    dic['name'] = info[0][2]
+                    dic['telephone'] = info[0][3]
+                    res.append(dic)
 
                 response = make_response(dumps(res),200)
         
@@ -87,13 +90,15 @@ def salesman_search():
                 response = make_response(dumps(error), 404)
             else:
                 info = rows()
-
-                res = []
-                dic = {}
-                dic['id'] = info[0][0]
-                dic['name'] = info[0][1]
-                dic['telephone'] = info[0][2]
-                res.append(dic)
+                if len(info) == 0:
+                    res = "id = {} doesn't exist".format(id)
+                else:
+                    res = []
+                    dic = {}
+                    dic['id'] = info[0][0]
+                    dic['name'] = info[0][1]
+                    dic['telephone'] = info[0][2]
+                    res.append(dic)
 
                 response = make_response(dumps(res),200)
         
