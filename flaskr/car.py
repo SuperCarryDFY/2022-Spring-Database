@@ -106,3 +106,53 @@ def search():
         return response
     else:
         return 'car/search'
+
+@bp.route('/search_Gnumber',methods=('POST','GET'))
+def search_Gnumber():
+    if request.method == 'POST':
+        db = get_db()
+        error = None
+        client_number = request.form['Gnumber']
+        if not client_number:
+            try:
+                rows = db.prepare("select * from car_sys.car_info")
+            except Exception as e:
+                error = traceback.format_exc()
+                response = make_response(dumps(error), 404)
+            else:
+                res = []
+                info = rows()
+                for row in info:
+                    dic = {}
+                    dic['carNo'] = row[0]
+                    dic['VLN'] = row[1]
+                    dic['color'] = row[2]
+                    dic['carType'] = row[3]
+                    dic['carClass'] = row[4]
+                    dic['Gnumber'] = row[5]
+                    res.append(dic)
+                
+            response = make_response(dumps(res),200)
+        else:
+            try:
+                rows = db.prepare("select * from car_sys.car_info where client_number='{}'".format(client_number))
+            except Exception as e:
+                error = traceback.format_exc()
+                response = make_response(dumps(error), 404)
+            else:
+                res = []
+                info = rows()
+                for row in info:
+                    dic = {}
+                    dic['carNo'] = row[0]
+                    dic['VLN'] = row[1]
+                    dic['color'] = row[2]
+                    dic['carType'] = row[3]
+                    dic['carClass'] = row[4]
+                    dic['Gnumber'] = row[5]
+                    res.append(dic)
+                response = make_response(dumps(res),200)
+
+        return response
+    else:
+        return 'car/search_Gnumber'
