@@ -20,6 +20,7 @@ def register():
         car_type = request.form['carType']
         car_class = request.form['carClass']
         client_number = request.form['Gnumber']
+        status = request.form['status']
 
         db = get_db()
         error = None
@@ -33,8 +34,8 @@ def register():
         if error is None:
             try:
                 db.execute(
-                    "INSERT INTO car_sys.car_info (car_number,car_arch,car_color,car_type,car_class,client_number) VALUES('{}','{}','{}','{}','{}','{}')".format(
-                        car_number, car_arch, car_color, car_type, car_class, client_number)
+                    "INSERT INTO car_sys.car_info (car_number,car_arch,car_color,car_type,car_class,client_number,status) VALUES('{}','{}','{}','{}','{}','{}','{}')".format(
+                        car_number, car_arch, car_color, car_type, car_class, client_number,status)
                 )
 
             except Exception as e:
@@ -73,6 +74,7 @@ def search():
                     dic['carType'] = row[3]
                     dic['carClass'] = row[4]
                     dic['Gnumber'] = row[5]
+                    dic['status'] = row[6]
                     res.append(dic)
                 
                 response = make_response(dumps(res),200)
@@ -93,6 +95,7 @@ def search():
                     dic['carType'] = row[3]
                     dic['carClass'] = row[4]
                     dic['Gnumber'] = row[5]
+                    dic['status'] = row[6]
                     res.append(dic)
                 response = make_response(dumps(res),200)
         return response
@@ -122,6 +125,7 @@ def search_Gnumber():
                     dic['carType'] = row[3]
                     dic['carClass'] = row[4]
                     dic['Gnumber'] = row[5]
+                    dic['status'] = row[6]
                     res.append(dic)
                 
             response = make_response(dumps(res),200)
@@ -142,6 +146,7 @@ def search_Gnumber():
                     dic['carType'] = row[3]
                     dic['carClass'] = row[4]
                     dic['Gnumber'] = row[5]
+                    dic['status'] = row[6]
                     res.append(dic)
                 response = make_response(dumps(res),200)
 
