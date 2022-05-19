@@ -1,4 +1,3 @@
-from genericpath import exists
 import traceback
 from json import dumps
 from flask import (
@@ -30,6 +29,7 @@ def repairman_search():
                     dic['type'] = row[1]
                     dic['name'] = row[2]
                     dic['telephone'] = row[3]
+                    dic['salary'] = row[4]
                     res.append(dic)
                 
                 response = make_response(dumps(res),200)
@@ -50,6 +50,7 @@ def repairman_search():
                     dic['type'] = info[0][1]
                     dic['name'] = info[0][2]
                     dic['telephone'] = info[0][3]
+                    dic['salary'] = info[0][4]
                     res.append(dic)
 
                 response = make_response(dumps(res),200)
