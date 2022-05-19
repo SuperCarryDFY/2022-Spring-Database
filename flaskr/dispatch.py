@@ -16,14 +16,12 @@ def register():
         error = None
         # 获取表单数据
         repair_number = request.form['repair_number']
-        repair_project = request.form['repair_project']
-        hours = request.form['hours']
         repair_man_number = request.form['repair_man_number']
 
         try:
             db.execute(
-                "INSERT INTO car_sys.repair_dispatch (repair_number, repair_project, hours, repair_man_number) VALUES('{}','{}','{}','{}')".format(
-                    repair_number, repair_project, hours, repair_man_number)
+                "INSERT INTO car_sys.repair_dispatch (repair_number, repair_man_number) VALUES('{}','{}')".format(
+                    repair_number, repair_man_number)
             )
         except Exception as e:
             error = traceback.format_exc()
@@ -63,9 +61,7 @@ def search():
             for row in info:
                 dic = {}
                 dic['repair_number'] = row[0]
-                dic['repair_project'] = row[1]
-                dic['hours'] = row[2]
-                dic['repair_man_number'] = row[3]
+                dic['repair_man_number'] = row[1]
                 res.append(dic)
             response = make_response(dumps(res),200)
         return response
