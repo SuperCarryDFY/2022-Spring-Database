@@ -53,7 +53,66 @@ def register():
                 dumps('repair_number:{} insert successfully'.format(repair_number)), 200)
         
         return response
-
-
     else:
         return '/order/register'
+
+
+@bp.route('/search', methods=('POST','GET'))
+def search():
+    if request.method == 'POST':
+        db = get_db()
+        error = None
+        client_number = request.form['Gnumber']
+        if not client_number:
+            try:
+                rows = db.prepare("select * from car_sys.repair_order")
+            except Exception as e:
+                error = traceback.format_exc()
+                response = make_response(dumps(error), 404)  
+            else:
+                res = []
+                info = rows()
+                for row in info:
+                    dic = {}
+                    dic['Gnumber'] = row[0]
+                    dic['repair_type'] = row[1]
+                    dic['job_type'] = row[2]
+                    dic['pay_method'] = row[3]
+                    dic['VLN'] = row[4]
+                    dic['mileage'] = row[5]
+                    dic['oil_mass'] = row[6]
+                    dic['begin_time'] = row[7]
+                    dic['salesman_number'] = row[8]
+                    dic['end_time'] = row[9]
+                    dic['breakdown_des'] = row[10]
+                    res.append(dic)
+                
+                response = make_response(dumps(res),200)
+        else:
+            try:
+                rows = db.prepare("select * from car_sys.repair_order where client_number='{}'".format(client_number))
+            except Exception as e:
+                error = traceback.format_exc()
+                response = make_response(dumps(error), 404)
+            else:
+                res = []
+                info = rows()
+                for row in info:
+                    dic = {}
+                    dic['Gnumber'] = row[0]
+                    dic['repair_type'] = row[1]
+                    dic['job_type'] = row[2]
+                    dic['pay_method'] = row[3]
+                    dic['VLN'] = row[4]
+                    dic['mileage'] = row[5]
+                    dic['oil_mass'] = row[6]
+                    dic['begin_time'] = row[7]
+                    dic['salesman_number'] = row[8]
+                    dic['end_time'] = row[9]
+                    dic['breakdown_des'] = row[10]
+                    dic['repair_number'] = row[11]
+                    res.append(dic)
+                response = make_response(dumps(res),200)
+        return response
+    else:
+        return '/order/search'
