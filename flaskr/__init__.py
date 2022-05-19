@@ -37,6 +37,9 @@ def create_app(test_config=None):
     from . import staff
     app.register_blueprint(staff.bp)
 
+    from . import order
+    app.register_blueprint(order.bp)
+
     from . import auth
     app.register_blueprint(auth.bp)
 

@@ -17,7 +17,7 @@ def get_repair_number():
     else:
         return rows()[-1][-1]+1
 
-@bp.route(path='/register', methods=('POST','GET'))
+@bp.route('/register', methods=('POST','GET'))
 def register():
     db = get_db()
     error = None
@@ -31,15 +31,18 @@ def register():
         mileage = request.form['mileage']
         oil_mass = request.form['oil_mass']
         begin_time = request.form['begin_time']
-        saleman_name = request.form['saleman_name']
-        saleman_number = request.form['saleman_number']
+        salesman_number = request.form['salesman_number']
         end_time = request.form['end_time']
         breakdown_des = request.form['breakdown_des']
         repair_number = get_repair_number()
 
+
         try :
             # 这里写sql插入语句
-            pass
+            db.execute(
+                "INSERT INTO car_sys.repair_order (client_number, repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
+                    client_number, repair_cha, job_classify, pay_method, car_arch, mileage, oil_mass, begin_time, salesman_number, end_time, breakdown_des,repair_number)
+            )
             
         except Exception as e:
             error = traceback.format_exc()
@@ -47,7 +50,7 @@ def register():
             response = make_response(dumps(error), 404)
         else:  
             response = make_response(
-                dumps('insert successfully'), 200)
+                dumps('repair_number:{} insert successfully'.format(repair_number)), 200)
         
         return response
 

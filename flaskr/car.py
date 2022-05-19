@@ -29,14 +29,6 @@ def register():
             error = 'VLN is required.'
         if not client_number:
             error = 'Gnumber is required.'
-        if not car_number:
-            car_number = "None"
-        if not car_type:
-            car_type = "None"
-        if not car_color:
-            car_color = "None"
-        if not car_class:
-            car_class = "None"
 
         if error is None:
             try:
