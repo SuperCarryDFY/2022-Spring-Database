@@ -12,11 +12,18 @@ bp = Blueprint('client', __name__, url_prefix='/client')
 def getnumber():
     db = get_db()
     row = db.prepare("select * from car_sys.client;")
-    last_record = row()[-1]
-    # last_record = "('GS0030', '上海戬臻实业有限公司', '个人', 100, '王', '13858646391')"
-    client_number = int(last_record[0][2:])
-    # client_number = 30
-    client_number += 1
+    # last_record = row()[-1]
+    # # last_record = "('GS0030', '上海戬臻实业有限公司', '个人', 100, '王', '13858646391')"
+    # client_number = int(last_record[0][2:])
+    # # client_number = 30
+    # client_number += 1
+    # client_number_str = str(client_number)
+    # client_number_str = (4-len(client_number_str))*'0' + client_number_str
+    records = row()
+    numbers = list()
+    for record in records:
+        numbers.append(int(record[0][2:]))
+    client_number = max(numbers)+1
     client_number_str = str(client_number)
     client_number_str = (4-len(client_number_str))*'0' + client_number_str
     return 'GS'+ client_number_str
