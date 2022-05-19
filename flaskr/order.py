@@ -19,9 +19,10 @@ def get_repair_number():
 
 @bp.route('/register', methods=('POST','GET'))
 def register():
-    db = get_db()
-    error = None
+
     if request.method == 'POST':
+        db = get_db()
+        error = None
         # 获取表单数据
         client_number = request.form['Gnumber']
         repair_cha = request.form['repair_type']

@@ -40,6 +40,9 @@ def create_app(test_config=None):
     from . import order
     app.register_blueprint(order.bp)
 
+    from . import dispatch
+    app.register_blueprint(dispatch.bp)
+
     from . import auth
     app.register_blueprint(auth.bp)
 
