@@ -153,3 +153,27 @@ def search_Gnumber():
         return response
     else:
         return 'car/search_Gnumber'
+
+
+@bp.route('/ChangeStatus',methods=('POST','GET'))
+def ChangeStatus():
+    if request.method == 'POST':
+        db = get_db()
+        error = None
+        car_arch = request.form['VLN']
+        status = request.form['status']
+        try:
+            db.execute("UPDATE car_sys.car_info set status={} where car_arch='{}'".format(status,car_arch))
+        
+        except Exception as e:
+            error = traceback.format_exc()
+            traceback.print_exc()
+            response = make_response(dumps(error), 404)
+
+        else:
+            response = make_response(
+                dumps('change successfully'), 200)
+        return response
+
+    else:
+        return '/car/change_status'

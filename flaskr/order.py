@@ -36,8 +36,8 @@ def register():
         end_time = request.form['end_time']
         breakdown_des = request.form['breakdown_des']
         repair_number = get_repair_number()
-        if not client_number:
-            error = 'Gnumber is required.'
+        if not salesman_number:
+            error = 'salesman_number is required.'
         if not car_arch:
             error = 'VLN is required.'
         if error :
