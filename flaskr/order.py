@@ -5,7 +5,6 @@ from flask import (
 )
 
 from flaskr.db import get_db
-from flaskr.staff import salesman_search
 
 bp = Blueprint('order', __name__, url_prefix='/order')
 
@@ -27,7 +26,6 @@ def register():
         db = get_db()
         error = None
         # 获取表单数据
-        client_number = request.form['Gnumber']
         repair_cha = request.form['repair_type']
         job_classify = request.form['job_type']
         pay_method = request.form['pay_method']
@@ -49,8 +47,8 @@ def register():
         try:
             # 这里写sql插入语句
             db.execute(
-                "INSERT INTO car_sys.repair_order (client_number, repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
-                    client_number, repair_cha, job_classify, pay_method, car_arch, mileage, oil_mass, begin_time, salesman_number, end_time, breakdown_des, repair_number)
+                "INSERT INTO car_sys.repair_order (repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
+                    repair_cha, job_classify, pay_method, car_arch, mileage, oil_mass, begin_time, salesman_number, end_time, breakdown_des, repair_number)
             )
 
         except Exception as e:
@@ -71,57 +69,42 @@ def search():
     if request.method == 'POST':
         db = get_db()
         error = None
-        client_number = request.form['Gnumber']
-        if not client_number:
+        car_arch = request.form['VLN']
+        if not car_arch:
             try:
-                rows = db.prepare("select * from car_sys.repair_order")
+                rows = db.prepare("select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch")
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
             else:
                 res = []
                 info = rows()
+                column_names = rows.column_names
                 for row in info:
                     dic = {}
-                    dic['Gnumber'] = row[0]
-                    dic['repair_type'] = row[1]
-                    dic['job_type'] = row[2]
-                    dic['pay_method'] = row[3]
-                    dic['VLN'] = row[4]
-                    dic['mileage'] = row[5]
-                    dic['oil_mass'] = row[6]
-                    dic['begin_time'] = row[7]
-                    dic['salesman_number'] = row[8]
-                    dic['end_time'] = row[9]
-                    dic['breakdown_des'] = row[10]
+                    for i in range(len(column_names)):
+                        dic[column_names[i]] = row[i]
                     res.append(dic)
-
                 response = make_response(dumps(res), 200)
         else:
             try:
                 rows = db.prepare(
-                    "select * from car_sys.repair_order where client_number='{}'".format(client_number))
+                    "select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch where repair_order.car_arch='{}'".format(car_arch))
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
             else:
                 res = []
                 info = rows()
+                column_names = rows.column_names
                 for row in info:
                     dic = {}
-                    dic['Gnumber'] = row[0]
-                    dic['repair_type'] = row[1]
-                    dic['job_type'] = row[2]
-                    dic['pay_method'] = row[3]
-                    dic['VLN'] = row[4]
-                    dic['mileage'] = row[5]
-                    dic['oil_mass'] = row[6]
-                    dic['begin_time'] = row[7]
-                    dic['salesman_number'] = row[8]
-                    dic['end_time'] = row[9]
-                    dic['breakdown_des'] = row[10]
-                    dic['repair_number'] = row[11]
+                    for i in range(len(column_names)):
+                        dic[column_names[i]] = row[i]
                     res.append(dic)
+                # print("res\n")
+                # print(res)
+                # print('\n')
                 response = make_response(dumps(res), 200)
         return response
     else:
