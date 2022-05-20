@@ -45,10 +45,10 @@ def search():
                 else:
                     res = []
                     dic = {}
-                    dic['repair_project_number'] = row[0]
-                    dic['repair_project'] = row[1]
-                    dic['hours'] = row[2]
-                    dic['cost'] = row[3]
+                    dic['repair_project_number'] = info[0][0]
+                    dic['repair_project'] = info[0][1]
+                    dic['hours'] = info[0][2]
+                    dic['cost'] = info[0][3]
                     res.append(dic)
 
                 response = make_response(dumps(res),200)
