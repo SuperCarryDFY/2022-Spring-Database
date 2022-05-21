@@ -76,9 +76,6 @@ def search():
         error = None
         car_arch = request.form['VLN']
         begin_time = request.form['begin_time']
-        if not begin_time or not car_arch:
-            error = 'begin_time and VLN is required!'
-            return make_response(dumps(error),404)
         if not car_arch:
             try:
                 rows = db.prepare("select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch")
