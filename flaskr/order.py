@@ -16,7 +16,11 @@ def get_repair_number():
     if len(info) == 0:
         return 1
     else:
-        return rows()[-1][-1]+1
+        repair_number_list = []
+        for record in info:
+            repair_number_list.append(record[-1])
+        return max(repair_number_list)+1
+
 
 
 @bp.route('/register', methods=('POST', 'GET'))
@@ -47,7 +51,7 @@ def register():
         try:
             # 这里写sql插入语句
             db.execute(
-                "INSERT INTO car_sys.repair_order (repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
+                "INSERT INTO car_sys.repair_order (repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
                     repair_cha, job_classify, pay_method, car_arch, mileage, oil_mass, begin_time, salesman_number, end_time, breakdown_des, repair_number)
             )
 
