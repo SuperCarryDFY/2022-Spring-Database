@@ -1,3 +1,4 @@
+from crypt import methods
 import traceback
 from json import dumps
 from flask import (
@@ -177,3 +178,12 @@ def ChangeStatus():
 
     else:
         return '/car/change_status'
+
+@bp.route('/update', methods=("POST","GET"))
+def delete():
+    if methods == "POST":
+        error = None
+        db = get_db()
+
+    else:
+        return '/car/delete'

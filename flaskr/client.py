@@ -112,3 +112,21 @@ def search():
         return 'client/search'
 
 
+@bp.route('/delete', methods=("DELETE","GET"))
+def delete():
+    if request.method == 'DELETE':
+        db = get_db()
+        error = None
+        client_number = request.form['Gnumber']
+        try:
+            db.execute("DELETE from car_sys.client where client_number='{}'".format(client_number))
+            
+        except Exception as e:
+            error = traceback.format_exc()
+            response = make_response(dumps(error), 404)
+        else:
+            response = make_response(dumps('delete Gnumber={} successfully!'.format(client_number)))
+        return response
+
+    else:
+        return '/client/delete'
