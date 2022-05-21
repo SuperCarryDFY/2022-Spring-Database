@@ -61,7 +61,7 @@ def register():
             response = make_response(dumps(error), 404)
         else:
             response = make_response(
-                dumps('repair_number:{} insert successfully'.format(repair_number)), 200)
+                dumps('insert successfully! repair_number:{} '.format(repair_number)), 200)
 
         return response
     else:
@@ -74,6 +74,7 @@ def search():
         db = get_db()
         error = None
         car_arch = request.form['VLN']
+        begin_time = request.form['begin_time']
         if not car_arch:
             try:
                 rows = db.prepare("select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch")
@@ -93,7 +94,7 @@ def search():
         else:
             try:
                 rows = db.prepare(
-                    "select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch where repair_order.car_arch='{}'".format(car_arch))
+                    "select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch where repair_order.car_arch='{}' and repair_order.begin_time='{}'".format(car_arch,begin_time))
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
