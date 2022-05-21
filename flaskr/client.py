@@ -1,13 +1,13 @@
-
 import traceback
 from json import dumps
 from flask import (
-    Blueprint, make_response,request
+    Blueprint, make_response, request
 )
 
 from flaskr.db import get_db
 
 bp = Blueprint('client', __name__, url_prefix='/client')
+
 
 def getnumber():
     db = get_db()
@@ -21,7 +21,7 @@ def getnumber():
     client_number = max(numbers)+1
     client_number_str = str(client_number)
     client_number_str = (4-len(client_number_str))*'0' + client_number_str
-    return 'GS'+ client_number_str
+    return 'GS' + client_number_str
 
 
 @bp.route('/Gnumber', methods=["GET"])
@@ -29,7 +29,7 @@ def Gnumber():
     return getnumber()
 
 
-@bp.route('/register', methods=('POST','GET'))
+@bp.route('/register', methods=('POST', 'GET'))
 def register():
     if request.method == 'POST':
         db = get_db()
@@ -60,7 +60,7 @@ def register():
         return 'client/register'
 
 
-@bp.route('/search', methods=('POST','GET'))
+@bp.route('/search', methods=('POST', 'GET'))
 def search():
     if request.method == 'POST':
         db = get_db()
@@ -85,11 +85,12 @@ def search():
                     dic['contact_man'] = row[4]
                     dic['contact_number'] = row[5]
                     res.append(dic)
-                
-                response = make_response(dumps(res),200)
+
+                response = make_response(dumps(res), 200)
         else:
             try:
-                rows = db.prepare("select * from car_sys.client where client_number='{}'".format(client_number))
+                rows = db.prepare(
+                    "select * from car_sys.client where client_number='{}'".format(client_number))
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
@@ -105,28 +106,37 @@ def search():
                 dic['contact_number'] = info[0][5]
                 res.append(dic)
 
-                response = make_response(dumps(res),200)
-        
+                response = make_response(dumps(res), 200)
+
         return response
     else:
         return 'client/search'
 
 
-@bp.route('/delete', methods=("DELETE","GET"))
+@bp.route('/update', methods=("POST", "GET"))
 def delete():
-    if request.method == 'DELETE':
+    if request.method == 'POST':
         db = get_db()
         error = None
         client_number = request.form['Gnumber']
+        client_name = request.form['name']
+        client_cha = request.form['type']
+        discount = request.form['discount']
+        contact_man = request.form['contact_man']
+        contact_number = request.form['contact_number']
         try:
-            db.execute("DELETE from car_sys.client where client_number='{}'".format(client_number))
-            
+            db.execute("UPDATE car_sys.client set client_name='{}', client_cha='{}', discount={}, contact_man='{}', contact_number='{}'  where client_number='{}'".format(
+                client_name, client_cha, discount, contact_man, contact_number, client_number))
+
         except Exception as e:
             error = traceback.format_exc()
+            print("error")
+            print(error)
             response = make_response(dumps(error), 404)
         else:
-            response = make_response(dumps('delete Gnumber={} successfully!'.format(client_number)))
+            response = make_response(
+                dumps('delete Gnumber={} successfully!'.format(client_number)))
         return response
 
     else:
-        return '/client/delete'
+        return '/client/update'
