@@ -1,4 +1,3 @@
-from crypt import methods
 import traceback
 from json import dumps
 from flask import (
@@ -36,23 +35,24 @@ def register():
             try:
                 db.execute(
                     "INSERT INTO car_sys.car_info (car_number,car_arch,car_color,car_type,car_class,client_number,status) VALUES('{}','{}','{}','{}','{}','{}','{}')".format(
-                        car_number, car_arch, car_color, car_type, car_class, client_number,status)
+                        car_number, car_arch, car_color, car_type, car_class, client_number, status)
                 )
 
             except Exception as e:
                 traceback.print_exc()
                 error = f"Car {car_arch} is already registered or the User{client_number} doesn't exits"
-                response = make_response(dumps(error),400)
+                response = make_response(dumps(error), 400)
             else:
-                response = make_response(dumps('register {} successfully'.format(car_arch)),200)
+                response = make_response(
+                    dumps('register {} successfully'.format(car_arch)), 200)
         else:
-            response = make_response(dumps(error),400)
+            response = make_response(dumps(error), 400)
         return response
     else:
         return 'car/register'
 
 
-@bp.route('/search', methods=('POST','GET'))
+@bp.route('/search', methods=('POST', 'GET'))
 def search():
     if request.method == 'POST':
         db = get_db()
@@ -77,11 +77,12 @@ def search():
                     dic['Gnumber'] = row[5]
                     dic['status'] = row[6]
                     res.append(dic)
-                
-                response = make_response(dumps(res),200)
+
+                response = make_response(dumps(res), 200)
         else:
             try:
-                rows = db.prepare("select * from car_sys.car_info where car_arch='{}'".format(car_arch))
+                rows = db.prepare(
+                    "select * from car_sys.car_info where car_arch='{}'".format(car_arch))
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
@@ -98,12 +99,13 @@ def search():
                     dic['Gnumber'] = row[5]
                     dic['status'] = row[6]
                     res.append(dic)
-                response = make_response(dumps(res),200)
+                response = make_response(dumps(res), 200)
         return response
     else:
         return 'car/search'
 
-@bp.route('/search_Gnumber',methods=('POST','GET'))
+
+@bp.route('/search_Gnumber', methods=('POST', 'GET'))
 def search_Gnumber():
     if request.method == 'POST':
         db = get_db()
@@ -128,11 +130,12 @@ def search_Gnumber():
                     dic['Gnumber'] = row[5]
                     dic['status'] = row[6]
                     res.append(dic)
-                
-            response = make_response(dumps(res),200)
+
+            response = make_response(dumps(res), 200)
         else:
             try:
-                rows = db.prepare("select * from car_sys.car_info where client_number='{}'".format(client_number))
+                rows = db.prepare(
+                    "select * from car_sys.car_info where client_number='{}'".format(client_number))
             except Exception as e:
                 error = traceback.format_exc()
                 response = make_response(dumps(error), 404)
@@ -149,14 +152,14 @@ def search_Gnumber():
                     dic['Gnumber'] = row[5]
                     dic['status'] = row[6]
                     res.append(dic)
-                response = make_response(dumps(res),200)
+                response = make_response(dumps(res), 200)
 
         return response
     else:
         return 'car/search_Gnumber'
 
 
-@bp.route('/ChangeStatus',methods=('POST','GET'))
+@bp.route('/ChangeStatus', methods=('POST', 'GET'))
 def ChangeStatus():
     if request.method == 'POST':
         db = get_db()
@@ -164,8 +167,9 @@ def ChangeStatus():
         car_arch = request.form['VLN']
         status = request.form['status']
         try:
-            db.execute("UPDATE car_sys.car_info set status={} where car_arch='{}'".format(status,car_arch))
-        
+            db.execute("UPDATE car_sys.car_info set status={} where car_arch='{}'".format(
+                status, car_arch))
+
         except Exception as e:
             error = traceback.format_exc()
             traceback.print_exc()
@@ -179,11 +183,28 @@ def ChangeStatus():
     else:
         return '/car/change_status'
 
-@bp.route('/update', methods=("POST","GET"))
+
+@bp.route('/update', methods=("POST", "GET"))
 def delete():
-    if methods == "POST":
+    if request.method == "POST":
         error = None
         db = get_db()
+        car_arch = request.form['VLN']
+        car_number = request.form['carNo']
+        car_color = request.form['color']
+        car_type = request.form['carType']
+        car_class = request.form['carClass']
+        client_number = request.form['Gnumber']
+        try:
+            db.execute("UPDATE car_sys.car_info set car_number='{}', car_color='{}', car_type='{}', car_class='{}', client_number='{}' where car_arch='{}'".format(
+                car_number, car_color, car_type, car_class, client_number,car_arch))
+        except Exception as e:
+            error = traceback.format_exc()
+            response = make_response(dumps(error), 404)
+        else:
+            response = make_response(
+                dumps("update VLN={} successfully".format(car_arch)), 200)
+        return response
 
     else:
-        return '/car/delete'
+        return '/car/update'

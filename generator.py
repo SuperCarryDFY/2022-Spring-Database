@@ -17,7 +17,7 @@ def car_number():
         p7 = random.choice(numbers)
         print(p1+p2+p3+p4+p5+p6+p7)
 
-# car_number()
+car_number()
 
 def VLN():
     Cset = '0123456789ABCDEFGHJKLMPRSTUVWXYZ'
@@ -28,4 +28,4 @@ def VLN():
             s += random.choice(Clist)
         print(s)
 
-VLN()
+# VLN()
