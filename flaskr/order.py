@@ -135,13 +135,39 @@ def change():
         repair_number = request.form['repair_number']
         cost = request.form['cost']
         status = request.form['status']
+        
+        # 接下来给没赋值的字段默认初值
+        if not repair_cha:
+            repair_cha = -1
+        if not job_classify:
+            job_classify = -1
+        if not pay_method:
+            pay_method = -1
+        if not mileage:
+            mileage = -1
+        if not oil_mass:
+            oil_mass = -1
+        if not begin_time:
+            begin_time = ''
+        if not end_time:
+            end_time = ''
+        if not breakdown_des:
+            breakdown_des=''
+        if not cost:
+            cost = -1
+        if not status:
+            status = ''
+
         if not repair_number:
             error = 'repair_number is required.'
         try:
-            db.execute("UPDATE car_sys.repair_order set repair_cha={}, job_classify={}, pay_method='{}', mileage={}, oil_mass={}, begin_time='{}', end_time='{}', breakdown_des='{}',cost={},status='{}' where repair_number='{}'".format(
+            db.execute("UPDATE car_sys.repair_order set repair_cha={}, job_classify={}, pay_method={}, mileage={}, oil_mass={}, begin_time='{}', end_time='{}', breakdown_des='{}', cost={}, status='{}' where repair_number={}".format(
                 repair_cha, job_classify, pay_method, mileage, oil_mass, begin_time, end_time, breakdown_des, cost, status, repair_number))
-        except Exception as e:
+            # db.execute("UPDATE car_sys.repair_order set  repair_cha={},job_classify={},pay_method={}, oil_mass={}, status='{}',cost={} where repair_number={}".format(repair_cha,job_classify,pay_method,oil_mass,status,cost,repair_number))
+        except Exception as e:  
             error = traceback.format_exc()
+            print('error')
+            print(error)
             response = make_response(dumps(error), 404)
         else:
             response = make_response(dumps("update order successfully"), 200)
