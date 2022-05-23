@@ -138,7 +138,7 @@ def change():
         if not repair_number:
             error = 'repair_number is required.'
         try:
-            db.execute("UPDATE car_sys.repair_order set repair_cha={}, job_classify={}, pay_method='{}', mileage={}, oil_mass={}, begin_time='{}', end_time='{}', breakdown_des='{}',cost='{}',status='{}' where repair_number='{}'".format(
+            db.execute("UPDATE car_sys.repair_order set repair_cha={}, job_classify={}, pay_method='{}', mileage={}, oil_mass={}, begin_time='{}', end_time='{}', breakdown_des='{}',cost={},status='{}' where repair_number='{}'".format(
                 repair_cha, job_classify, pay_method, mileage, oil_mass, begin_time, end_time, breakdown_des, cost, status, repair_number))
         except Exception as e:
             error = traceback.format_exc()
