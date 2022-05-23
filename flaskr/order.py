@@ -40,6 +40,7 @@ def register():
         salesman_number = request.form['salesman_number']
         end_time = request.form['end_time']
         breakdown_des = request.form['breakdown_des']
+        status = request.form['status']
         repair_number = get_repair_number()
         if not salesman_number:
             error = 'salesman_number is required.'
@@ -51,8 +52,8 @@ def register():
         try:
             # 这里写sql插入语句
             db.execute(
-                "INSERT INTO car_sys.repair_order (repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
-                    repair_cha, job_classify, pay_method, car_arch, mileage, oil_mass, begin_time, salesman_number, end_time, breakdown_des, repair_number)
+                "INSERT INTO car_sys.repair_order (repair_cha, job_classify, pay_method, car_arch, mileage,oil_mass,begin_time,salesman_number, end_time, breakdown_des, repair_number,status) VALUES('{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}','{}')".format(
+                    repair_cha, job_classify, pay_method, car_arch, mileage, oil_mass, begin_time, salesman_number, end_time, breakdown_des, repair_number, status)
             )
 
         except Exception as e:
@@ -132,11 +133,13 @@ def change():
         end_time = request.form['end_time']
         breakdown_des = request.form['breakdown_des']
         repair_number = request.form['repair_number']
+        cost = request.form['cost']
+        status = request.form['status']
         if not repair_number:
-            error = 'repari_number is required.'
+            error = 'repair_number is required.'
         try:
-            db.execute("UPDATE car_sys.repair_order set repair_cha={}, job_classify={}, pay_method='{}', mileage={}, oil_mass={}, begin_time='{}', end_time='{}', breakdown_des='{}' where repair_number='{}'".format(
-                repair_cha, job_classify, pay_method, mileage, oil_mass, begin_time, end_time, breakdown_des, repair_number))
+            db.execute("UPDATE car_sys.repair_order set repair_cha={}, job_classify={}, pay_method='{}', mileage={}, oil_mass={}, begin_time='{}', end_time='{}', breakdown_des='{}',cost='{}',status='{}' where repair_number='{}'".format(
+                repair_cha, job_classify, pay_method, mileage, oil_mass, begin_time, end_time, breakdown_des, cost, status, repair_number))
         except Exception as e:
             error = traceback.format_exc()
             response = make_response(dumps(error), 404)
