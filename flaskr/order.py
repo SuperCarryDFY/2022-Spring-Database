@@ -18,7 +18,7 @@ def get_repair_number():
     else:
         repair_number_list = []
         for record in info:
-            repair_number_list.append(record[-1])
+            repair_number_list.append(record[-3])
         return max(repair_number_list)+1
 
 @bp.route('/register', methods=('POST', 'GET'))
