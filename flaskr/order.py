@@ -21,11 +21,8 @@ def get_repair_number():
             repair_number_list.append(record[-1])
         return max(repair_number_list)+1
 
-
-
 @bp.route('/register', methods=('POST', 'GET'))
 def register():
-
     if request.method == 'POST':
         db = get_db()
         error = None

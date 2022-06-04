@@ -51,6 +51,9 @@ def create_app(test_config=None):
 
     from . import material
     app.register_blueprint(material.bp)
+    
+    from . import repair_material
+    app.register_blueprint(repair_material.bp)
 
     from . import blog
     app.register_blueprint(blog.bp)
