@@ -1,5 +1,6 @@
 import traceback
 from json import dumps
+from urllib import response
 from flask import (
     Blueprint, make_response, request
 )
@@ -172,3 +173,28 @@ def change():
 
     else:
         return '/order/change'
+
+
+
+@bp.route('/searchVLN', methods=('POST', 'GET'))
+def searchVLN():
+    if request.method == 'POST':
+        db = get_db()
+        error = None
+        car_arch = request.form['VLN']
+        if not car_arch:
+            error = 'VLN is required. '
+            return make_response(dumps(error),404)
+        rows = db.prepare(
+                    "select * from car_sys.repair_order join car_sys.car_info on repair_order.car_arch=car_info.car_arch where repair_order.car_arch='{}'".format(car_arch))
+        column_names = rows.column_names
+        res = []
+        for row in rows():
+            dic = {}
+            for i in range(len(column_names)):
+                dic[column_names[i]] = row[i]
+            res.append(dic)
+        return make_response(dumps(res),200)
+    else:
+        return 'order/searchVLN'
+
