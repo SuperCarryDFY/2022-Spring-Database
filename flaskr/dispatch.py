@@ -63,6 +63,7 @@ def search():
                 dic = {}
                 dic['repair_number'] = row[0]
                 dic['repair_man_number'] = row[1]
+                dic['repair_project'] = row[2]
                 res.append(dic)
             response = make_response(dumps(res),200)
         return response
@@ -71,9 +72,9 @@ def search():
 
 
 
-@bp.route('/delete', methods=('POST','GET'))
+@bp.route('/delete', methods=('DELETE','GET'))
 def delete():
-    if request.method == 'POST':
+    if request.method == 'DELETE':
         db = get_db()
         error = None
         repair_number = request.form['repair_number']
