@@ -46,13 +46,13 @@ def search():
         repair_man_number = request.form['repair_man_number']
         try:
             if not repair_number and not repair_man_number:
-                rows = db.prepare("select A.repair_number, A.repair_project_number, C.repair_project, C.hours, B.id, B.repair_man_classify, C.cost  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number")
+                rows = db.prepare("select *  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number")
             elif not repair_number:
-                rows = db.prepare("select A.repair_number, A.repair_project_number, C.repair_project, C.hours, B.id, B.repair_man_classify, C.cost  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number and  A.repair_man_number={}".format(repair_man_number))
+                rows = db.prepare("select *  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number and  A.repair_man_number={}".format(repair_man_number))
             elif not repair_man_number:
-                rows = db.prepare("select A.repair_number, A.repair_project_number, C.repair_project, C.hours, B.id, B.repair_man_classify, C.cost  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number and  A.repair_number={}".format(repair_number))
+                rows = db.prepare("select *  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number and  A.repair_number={}".format(repair_number))
             else:
-                rows = db.prepare("select A.repair_number, A.repair_project_number, C.repair_project, C.hours, B.id, B.repair_man_classify, C.cost  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number and  A.repair_man_number={} and  A.repair_number={}".format(repair_man_number,repair_number))
+                rows = db.prepare("select *  from car_sys.repair_dispatch as A, car_sys.repairman as B, car_sys.repair_project as C  where B.id=A.repair_man_number and C.repair_project_number=A.repair_project_number and  A.repair_man_number={} and  A.repair_number={}".format(repair_man_number,repair_number))
         except Exception as e:
             error = traceback.format_exc()
             response = make_response(dumps(error), 404) 
